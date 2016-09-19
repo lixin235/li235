@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>瀑布流</title>
+		<style type="text/css">
+			*{
+				margin: 0;
+				padding: 0;
+			}
+			#wrap{
+				margin: 0 auto;
+				overflow: hidden;
+				width: 100%;
+			}
+			ul{
+				width: 29%;
+				margin: 1%;
+				float: left;
+				list-style: none;
+			}
+			li{
+				margin: 1%;
+				background: green;
+			}
+		</style>
+		<script type="text/javascript">
+			window.onload = function() {
+				var ul = document.getElementsByTagName("ul");
+				function getRandomHeight(min,max) {
+					var num = parseInt(Math.random()*(max-min)+min);//确定高度的范围
+					return num;
+				}
+				createLi();
+				function createLi() {
+				  //生成10个不同高度的li
+				  for(var i=0;i<10;i++){
+					  var li = document.createElement("li");
+					  li.style.height = getRandomHeight(100,500)+"px";
+					  li.innerHTML = i;
+            var ulHeightArr=[];//将所有的高度定义一个空数组
+            var minHeight;//声明最小高度
+            var minIndex = 0;//声明最小高度假设为0
+            for(var j=0;j<ul.length;j++){
+          	  ulHeightArr.push(ul[j].offsetHeight);//将随机的高度追加到空数组中
+          	  minHeight = ulHeightArr[0];//假设最小高度等于随机数组中的第一个值
+          	  if(minHeight>ulHeightArr[j]){//将最小高度与随机数组中的所有值进行对比，假设这个最小高度大于数组的高度，那么最小高度就存在于数组中
+          		  minIndex = j //找到数组中的最小高度的值并赋值给最小高度
+          	  }
+          	  ul[minIndex].appendChild(li);//在最小高度后面追加li
+            }	
+				  }
+				}
+//				var color = ["blue","red","green","yellow","gray","black"]
+				window.onscroll = function() {
+				  var trueHeight = document.documentElement.offsetHeight;//页面本身真实 的高度（显示的+未显示的）
+				  var seeHeight = document.documentElement.clientHeight;//当前页面显示的可以看见的高度
+				  var scrollHeight = trueHeight - seeHeight;//滚轮可以滑动的高度（真实高度-显示的高度= 未显示的高度）
+				  var scrollTop = document.documentElement.scrollTop+document.body.scrollTop;//获取滚轮事件
+					if(scrollTop == scrollHeight){//当滚轮滚到未显示高度为零时，增加新的节点
+						createLi();
+					}
+				}
+				window.onresize = function() {
+					var trueWidth = document.documentElement.clientWidth;
+					if(trueWidth>1024){
+						for(var i=0;i<ul.length;i++){
+							ul[i].style.width = "29%";
+						}
+					}else if(trueWidth<1024 && trueWidth>768) {
+						for(var i=0;i<ul.length;i++){
+							ul[i].style.width = "48%";
+						}
+					}else{
+						for(var i=0;i<ul.length;i++){
+							ul[i].style.width = "100%";
+						}
+					}
+				}
+			}
+		</script>
+	</head>
+	<body>
+		<div id="wrap">
+			<ul>
+				<li></li>
+			</ul>
+			<ul></ul>
+			<ul></ul>
+		</div>
+	</body>
+</html>
